@@ -21,6 +21,23 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
           useMaterial3: true,
+          cardTheme: const CardTheme(
+            elevation: 3,
+            margin: EdgeInsets.zero,
+          ),
+          elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ElevatedButton.styleFrom(
+              foregroundColor: Colors.white,
+              backgroundColor: Colors.blue,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+          ),
+          textTheme: const TextTheme(
+            bodyMedium: TextStyle(fontSize: 14),
+            titleLarge: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
         ),
         home: const HomeScreen(),
       ),

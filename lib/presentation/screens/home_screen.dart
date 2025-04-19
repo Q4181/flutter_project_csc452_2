@@ -18,7 +18,14 @@ class HomeScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Food Nutrient Tracker'),
+        title: const Text(
+          'Food Nutrient Tracker',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
+        elevation: 2,
+        backgroundColor: Theme.of(context).primaryColor,
+        foregroundColor: Colors.white,
       ),
       body: Consumer<FoodProvider>(
         builder: (context, provider, child) {
@@ -35,12 +42,12 @@ class HomeScreen extends StatelessWidget {
             children: [
               Expanded(
                 child: GridView.builder(
-                  padding: const EdgeInsets.all(8),
+                  padding: const EdgeInsets.all(12),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 8,
-                    mainAxisSpacing: 8,
-                    childAspectRatio: 0.8,
+                    crossAxisCount: 4, // Changed from 2 to 4 for 4 cards per row
+                    crossAxisSpacing: 10, // Reduced for denser layout
+                    mainAxisSpacing: 10, // Reduced for denser layout
+                    childAspectRatio: 0.9, // Adjusted for smaller, balanced cards
                   ),
                   itemCount: provider.foods.length,
                   itemBuilder: (context, index) {
@@ -54,14 +61,17 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 child: ElevatedButton(
                   onPressed: () {
                     final totals = provider.calculateTotalNutrients();
                     showDialog(
                       context: context,
                       builder: (context) => AlertDialog(
-                        title: const Text('Total Nutrients'),
+                        title: const Text(
+                          'Total Nutrients',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
                         content: Column(
                           mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -83,7 +93,17 @@ class HomeScreen extends StatelessWidget {
                       ),
                     );
                   },
-                  child: const Text('Calculate Nutrients'),
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    elevation: 3,
+                  ),
+                  child: const Text(
+                    'Calculate Nutrients',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  ),
                 ),
               ),
             ],
