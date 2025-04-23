@@ -7,27 +7,27 @@ class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) {//ui widget
     final foodProvider = Provider.of<FoodProvider>(context, listen: false);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (foodProvider.foods.isEmpty && !foodProvider.isLoading) {
-        foodProvider.fetchFoods();
+        foodProvider.fetchFoods();//import food in ui
       }
     });
 
     return Scaffold(
-      appBar: AppBar(
+      appBar: AppBar(//bar UI
         title: const Text(
           'Food Nutrient Tracker',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
         elevation: 2,
-        backgroundColor: Theme.of(context).primaryColor,
+        backgroundColor: Color.fromARGB(255, 137, 208, 121),
         foregroundColor: Colors.white,
       ),
-      body: Consumer<FoodProvider>(
+      body: Consumer<FoodProvider>(//UI state(loading,error,els)
         builder: (context, provider, child) {
           if (provider.isLoading) {
             return const Center(child: CircularProgressIndicator());
@@ -42,17 +42,17 @@ class HomeScreen extends StatelessWidget {
             children: [
               Expanded(
                 child: GridView.builder(
-                  padding: const EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(12),//spase around card
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 4, // Changed from 2 to 4 for 4 cards per row
-                    crossAxisSpacing: 10, // Reduced for denser layout
-                    mainAxisSpacing: 10, // Reduced for denser layout
-                    childAspectRatio: 0.9, // Adjusted for smaller, balanced cards
+                    crossAxisCount: 4, //row
+                    crossAxisSpacing: 10, //space layout x
+                    mainAxisSpacing: 10,  //space layout y 
+                    childAspectRatio: 0.9,
                   ),
-                  itemCount: provider.foods.length,
-                  itemBuilder: (context, index) {
+                  itemCount: provider.foods.length,//create length
+                  itemBuilder: (context, index) {//create food
                     final food = provider.foods[index];
-                    return FoodCard(
+                    return FoodCard(//out ui food card
                       food: food,
                       isSelected: provider.selectedFoods.contains(food),
                       onTap: () => provider.toggleFoodSelection(food),
@@ -60,11 +60,11 @@ class HomeScreen extends StatelessWidget {
                   },
                 ),
               ),
-              Padding(
+              Padding(//button cal Ui
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 child: ElevatedButton(
                   onPressed: () {
-                    final totals = provider.calculateTotalNutrients();
+                    final totals = provider.calculateTotalNutrients();//cal
                     showDialog(
                       context: context,
                       builder: (context) => AlertDialog(
@@ -72,17 +72,53 @@ class HomeScreen extends StatelessWidget {
                           'Total Nutrients',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        content: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('Protein: ${totals['protein']!.toStringAsFixed(1)} g'),
-                            Text('Fat: ${totals['fat']!.toStringAsFixed(1)} g'),
-                            Text('Carbohydrates: ${totals['carbohydrates']!.toStringAsFixed(1)} g'),
-                            Text('Fiber: ${totals['fiber']!.toStringAsFixed(1)} g'),
-                            Text('Sugar: ${totals['sugar']!.toStringAsFixed(1)} g'),
-                            Text('Sodium: ${totals['sodium']!.toStringAsFixed(1)} mg'),
-                          ],
+                        content: SingleChildScrollView(//backup case so mush food in cal
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'Selected Foods:',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              if (provider.selectedFoods.isEmpty)//case not select food
+                                const Text(
+                                  'No foods selected',
+                                  style: TextStyle(fontStyle: FontStyle.italic),
+                                )
+                              else//case have food
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: provider.selectedFoods.asMap().entries.map((entry) {//ดึงอาหาร
+                                    final index = entry.key;
+                                    final food = entry.value;
+                                    return Text(//show food select
+                                      '${index + 1}. ${food.foodName}',
+                                      style: const TextStyle(fontSize: 14),
+                                    );
+                                  }).toList(),
+                                ),
+                              const SizedBox(height: 16),
+                              const Text(
+                                'Nutrient Totals:',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Text('Protein: ${totals['protein']!.toStringAsFixed(1)} g'),
+                              Text('Fat: ${totals['fat']!.toStringAsFixed(1)} g'),
+                              Text('Carbohydrates: ${totals['carbohydrates']!.toStringAsFixed(1)} g'),
+                              Text('Fiber: ${totals['fiber']!.toStringAsFixed(1)} g'),
+                              Text('Sugar: ${totals['sugar']!.toStringAsFixed(1)} g'),
+                              Text('Sodium: ${totals['sodium']!.toStringAsFixed(1)} mg'),
+                            ],
+                          ),
                         ),
                         actions: [
                           TextButton(
@@ -93,7 +129,7 @@ class HomeScreen extends StatelessWidget {
                       ),
                     );
                   },
-                  style: ElevatedButton.styleFrom(
+                  style: ElevatedButton.styleFrom(//ui button OK
                     padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),

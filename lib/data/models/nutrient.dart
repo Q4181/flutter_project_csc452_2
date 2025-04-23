@@ -1,1 +1,0 @@
-// Nutrient model is included in food.dart to avoid redundancy.

@@ -7,6 +7,6 @@ class FoodRepository {
   FoodRepository(this.apiService);
 
   Future<List<Food>> getFoodsWithNutrients() async {
-    return await apiService.fetchFoodsWithNutrients();
+    return await apiService.fetchFoodsWithNutrients();//ส่งapiเข้าprogram
   }
 }

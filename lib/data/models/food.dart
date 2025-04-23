@@ -1,8 +1,8 @@
-class Food {
+class Food {//add api(food_repository) food in program(category and servingSize use in web )
   final int foodId;
   final String foodName;
-  final String category;
-  final String servingSize;
+  final String category;//not use
+  final String servingSize;//not use again
   final String imageUrl;
   final Nutrient? nutrient;
 
@@ -15,6 +15,7 @@ class Food {
     this.nutrient,
   });
 
+//JSON to Food obj to use other and cal
   factory Food.fromJson(Map<String, dynamic> json) {
     return Food(
       foodId: json['food_id'],
@@ -28,8 +29,10 @@ class Food {
     );
   }
 }
-
-class Nutrient {
+//                      ^
+//                      |
+//                      |
+class Nutrient {//same food 
   final int nutrientId;
   final int foodId;
   final double protein;

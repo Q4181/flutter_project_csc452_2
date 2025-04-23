@@ -17,16 +17,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => FoodProvider()),
       ],
       child: MaterialApp(
-        title: 'Food Nutrient Tracker',
         theme: ThemeData(
-          primarySwatch: Colors.blue,
-          useMaterial3: true,
-          cardTheme: const CardTheme(
-            elevation: 3,
-            margin: EdgeInsets.zero,
-          ),
           elevatedButtonTheme: ElevatedButtonThemeData(
-            style: ElevatedButton.styleFrom(
+            style: ElevatedButton.styleFrom(//color button Cal
               foregroundColor: Colors.white,
               backgroundColor: Colors.blue,
               shape: RoundedRectangleBorder(

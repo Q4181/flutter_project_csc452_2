@@ -15,8 +15,8 @@ class FoodCard extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    return Card(
+  Widget build(BuildContext context) {//UI card
+    return Card(//layout cart ui
       elevation: 3,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
@@ -24,14 +24,14 @@ class FoodCard extends StatelessWidget {
             ? BorderSide(color: Theme.of(context).primaryColor, width: 2)
             : BorderSide.none,
       ),
-      child: InkWell(
+      child: InkWell(//click card ui
         borderRadius: BorderRadius.circular(12),
         onTap: onTap,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
-              child: ClipRRect(
+              child: ClipRRect(//img ui
                 borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
                 child: CachedNetworkImage(
                   imageUrl: food.imageUrl,
@@ -41,8 +41,8 @@ class FoodCard extends StatelessWidget {
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(6.0), // Reduced from 8.0
+            Padding(//ui
+              padding: const EdgeInsets.all(6),  
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -50,7 +50,7 @@ class FoodCard extends StatelessWidget {
                     child: Text(
                       food.foodName,
                       style: const TextStyle(
-                        fontSize: 12, // Reduced from 14
+                        fontSize: 12,
                         fontWeight: FontWeight.w600,
                       ),
                       overflow: TextOverflow.ellipsis,
@@ -62,8 +62,8 @@ class FoodCard extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(4),
                     ),
-                    activeColor: Theme.of(context).primaryColor,
-                    visualDensity: VisualDensity.compact, // Smaller checkbox
+                    activeColor: Theme.of(context).primaryColor,//small checkB
+                    visualDensity: VisualDensity.compact
                   ),
                 ],
               ),

@@ -3,8 +3,8 @@ import 'package:http/http.dart' as http;
 import '../models/food.dart';
 import '../../constants.dart';
 
-class ApiService {
-  Future<List<Food>> fetchFoodsWithNutrients() async {
+class ApiService {//import api to use this program
+  Future<List<Food>> fetchFoodsWithNutrients() async {//cheack api work?
     final response = await http.get(Uri.parse('${Constants.apiBaseUrl}/foods/nutrients'));
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body);
