@@ -24,7 +24,7 @@ class HomeScreen extends StatelessWidget {
         ),
         centerTitle: true,
         elevation: 2,
-        backgroundColor: Color.fromARGB(255, 137, 208, 121),
+        backgroundColor: Color.fromARGB(255, 230, 67, 67),
         foregroundColor: Colors.white,
       ),
       body: Consumer<FoodProvider>(//UI state(loading,error,els)
@@ -60,6 +60,8 @@ class HomeScreen extends StatelessWidget {
                   },
                 ),
               ),
+              
+              
               Padding(//button cal Ui
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 child: ElevatedButton(
@@ -72,7 +74,7 @@ class HomeScreen extends StatelessWidget {
                           'Total Nutrients',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        content: SingleChildScrollView(//backup case so mush food in cal
+                        content: SingleChildScrollView(//case so mush food in cal
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             crossAxisAlignment: CrossAxisAlignment.start,
