@@ -8,7 +8,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// ✅ Connect to TiDB
+// Connect to TiDB
 const connection = mysql.createConnection({ uri: process.env.DATABASE_URL });
 
 connection.connect((err) => {
