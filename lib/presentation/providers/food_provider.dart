@@ -3,26 +3,39 @@ import '../../data/models/food.dart';
 import '../../data/repositories/food_repository.dart';
 import '../../data/services/api_service.dart';
 
-class FoodProvider with ChangeNotifier {//เป็นstateเวลาพวกอาหาร(อยู่ในprogram cant see)
+class FoodProvider with ChangeNotifier {
   final FoodRepository _foodRepository;
   List<Food> _foods = [];
   List<Food> _selectedFoods = [];
   bool _isLoading = false;
-  String? _error;//เป็นstateต่างๆ(มีไว้checkเฉยๆไม่มีก็ได้ถ้าไม่ต้องการ)
-                          //   <-------
+  String? _error;
+  List<String> _categories = ['All']; // เพิ่มหมวดหมู่เริ่มต้นเป็น "All"
+  String _selectedCategory = 'All'; // หมวดหมู่ที่เลือก (เริ่มต้นที่ All)
+
   FoodProvider() : _foodRepository = FoodRepository(ApiService());
-//getter
-  List<Food> get foods => _foods;
+
+  // Getters
+  List<Food> get foods {
+    if (_selectedCategory == 'All') {
+      return _foods; // แสดงอาหารทั้งหมดถ้าเลือก "All"
+    }
+    return _foods.where((food) => food.category == _selectedCategory).toList();
+  }
+
   List<Food> get selectedFoods => _selectedFoods;
   bool get isLoading => _isLoading;
   String? get error => _error;
+  List<String> get categories => _categories;
+  String get selectedCategory => _selectedCategory;
 
-// ดึงข้อมูลอาหารจาก repository
+  // ดึงข้อมูลอาหารและสร้างรายการหมวดหมู่
   Future<void> fetchFoods() async {
     _isLoading = true;
     notifyListeners();
-    try {           //|-------------Repository-------------|
+    try {
       _foods = await _foodRepository.getFoodsWithNutrients();
+      // สร้างรายการหมวดหมู่ที่ไม่ซ้ำกัน
+      _categories = ['All', ..._foods.map((food) => food.category).toSet().toList()];
       _error = null;
     } catch (e) {
       _error = e.toString();
@@ -31,7 +44,14 @@ class FoodProvider with ChangeNotifier {//เป็นstateเวลาพวก
       notifyListeners();
     }
   }
-//selection food มีผลกับcheckboxใน  ้นทำ
+
+  // เลือกหรือเปลี่ยนหมวดหมู่
+  void selectCategory(String category) {
+    _selectedCategory = category;
+    notifyListeners();
+  }
+
+  // การเลือกอาหาร (เหมือนเดิม)
   void toggleFoodSelection(Food food) {
     if (_selectedFoods.contains(food)) {
       _selectedFoods.remove(food);
@@ -41,15 +61,16 @@ class FoodProvider with ChangeNotifier {//เป็นstateเวลาพวก
     notifyListeners();
   }
 
-  Map<String, double> calculateTotalNutrients() {// cal nutrients selection
-    double protein = 0;//add nutrients
+  // คำนวณสารอาหาร (เหมือนเดิม)
+  Map<String, double> calculateTotalNutrients() {
+    double protein = 0;
     double fat = 0;
     double carbohydrates = 0;
     double fiber = 0;
     double sugar = 0;
     double sodium = 0;
 
-    for (var food in _selectedFoods) {//cal select
+    for (var food in _selectedFoods) {
       if (food.nutrient != null) {
         protein += food.nutrient!.protein;
         fat += food.nutrient!.fat;
@@ -60,7 +81,7 @@ class FoodProvider with ChangeNotifier {//เป็นstateเวลาพวก
       }
     }
 
-    return { // ส่งกลับ
+    return {
       'protein': protein,
       'fat': fat,
       'carbohydrates': carbohydrates,

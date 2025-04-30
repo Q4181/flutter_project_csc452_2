@@ -7,17 +7,17 @@ class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {//ui widget
+  Widget build(BuildContext context) {
     final foodProvider = Provider.of<FoodProvider>(context, listen: false);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (foodProvider.foods.isEmpty && !foodProvider.isLoading) {
-        foodProvider.fetchFoods();//import food in ui
+        foodProvider.fetchFoods();
       }
     });
 
     return Scaffold(
-      appBar: AppBar(//bar UI
+      appBar: AppBar(
         title: const Text(
           'Food Nutrient Tracker',
           style: TextStyle(fontWeight: FontWeight.bold),
@@ -27,7 +27,7 @@ class HomeScreen extends StatelessWidget {
         backgroundColor: Color.fromARGB(255, 230, 67, 67),
         foregroundColor: Colors.white,
       ),
-      body: Consumer<FoodProvider>(//UI state(loading,error,els)
+      body: Consumer<FoodProvider>(
         builder: (context, provider, child) {
           if (provider.isLoading) {
             return const Center(child: CircularProgressIndicator());
@@ -35,24 +35,79 @@ class HomeScreen extends StatelessWidget {
           if (provider.error != null) {
             return Center(child: Text('Error: ${provider.error}'));
           }
-          if (provider.foods.isEmpty) {
+          if (provider.foods.isEmpty && provider.selectedCategory == 'All') {
             return const Center(child: Text('No foods available'));
           }
+
           return Column(
             children: [
+              // Dropdown สำหรับเลือกหมวดหมู่
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: DropdownButton<String>(
+                  value: provider.selectedCategory,
+                  isExpanded: true,
+                  hint: const Text('Select Category'),
+                  items: provider.categories.map((category) {
+                    return DropdownMenuItem<String>(
+                      value: category,
+                      child: Text(category),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    if (value != null) {
+                      provider.selectCategory(value);
+                    }
+                  },
+                  style: const TextStyle(fontSize: 16, color: Colors.black),
+                  underline: Container(
+                    height: 2,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                ),
+              ),
+              // FilterChip สำหรับเลือกหมวดหมู่ (ทางเลือกเสริม)
+              /*
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: Wrap(
+                  spacing: 8,
+                  children: provider.categories.map((category) {
+                    return FilterChip(
+                      label: Text(category),
+                      selected: provider.selectedCategory == category,
+                      onSelected: (selected) {
+                        provider.selectCategory(category);
+                      },
+                      selectedColor: Theme.of(context).primaryColor.withOpacity(0.2),
+                      checkmarkColor: Theme.of(context).primaryColor,
+                    );
+                  }).toList(),
+                ),
+              ),
+              */
+              // แสดงข้อความเมื่อไม่มีอาหารในหมวดหมู่
+              if (provider.foods.isEmpty)
+                const Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Text(
+                    'No foods in this category',
+                    style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic),
+                  ),
+                ),
               Expanded(
                 child: GridView.builder(
-                  padding: const EdgeInsets.all(12),//spase around card
+                  padding: const EdgeInsets.all(12),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 4, //row
-                    crossAxisSpacing: 10, //space layout x
-                    mainAxisSpacing: 10,  //space layout y 
+                    crossAxisCount: 4,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
                     childAspectRatio: 0.9,
                   ),
-                  itemCount: provider.foods.length,//create length
-                  itemBuilder: (context, index) {//create food
+                  itemCount: provider.foods.length,
+                  itemBuilder: (context, index) {
                     final food = provider.foods[index];
-                    return FoodCard(//out ui food card
+                    return FoodCard(
                       food: food,
                       isSelected: provider.selectedFoods.contains(food),
                       onTap: () => provider.toggleFoodSelection(food),
@@ -60,13 +115,11 @@ class HomeScreen extends StatelessWidget {
                   },
                 ),
               ),
-              
-              
-              Padding(//button cal Ui
+              Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 child: ElevatedButton(
                   onPressed: () {
-                    final totals = provider.calculateTotalNutrients();//cal
+                    final totals = provider.calculateTotalNutrients();
                     showDialog(
                       context: context,
                       builder: (context) => AlertDialog(
@@ -74,7 +127,7 @@ class HomeScreen extends StatelessWidget {
                           'Total Nutrients',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        content: SingleChildScrollView(//case so mush food in cal
+                        content: SingleChildScrollView(
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -87,18 +140,18 @@ class HomeScreen extends StatelessWidget {
                                 ),
                               ),
                               const SizedBox(height: 8),
-                              if (provider.selectedFoods.isEmpty)//case not select food
+                              if (provider.selectedFoods.isEmpty)
                                 const Text(
                                   'No foods selected',
                                   style: TextStyle(fontStyle: FontStyle.italic),
                                 )
-                              else//case have food
+                              else
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: provider.selectedFoods.asMap().entries.map((entry) {//ดึงอาหาร
+                                  children: provider.selectedFoods.asMap().entries.map((entry) {
                                     final index = entry.key;
                                     final food = entry.value;
-                                    return Text(//show food select
+                                    return Text(
                                       '${index + 1}. ${food.foodName}',
                                       style: const TextStyle(fontSize: 14),
                                     );
@@ -131,7 +184,7 @@ class HomeScreen extends StatelessWidget {
                       ),
                     );
                   },
-                  style: ElevatedButton.styleFrom(//ui button OK
+                  style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
