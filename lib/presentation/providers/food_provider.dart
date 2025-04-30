@@ -9,15 +9,15 @@ class FoodProvider with ChangeNotifier {
   List<Food> _selectedFoods = [];
   bool _isLoading = false;
   String? _error;
-  List<String> _categories = ['All']; // เพิ่มหมวดหมู่เริ่มต้นเป็น "All"
-  String _selectedCategory = 'All'; // หมวดหมู่ที่เลือก (เริ่มต้นที่ All)
+  List<String> _categories = ['All'];
+  String _selectedCategory = 'All';
 
   FoodProvider() : _foodRepository = FoodRepository(ApiService());
 
   // Getters
   List<Food> get foods {
     if (_selectedCategory == 'All') {
-      return _foods; // แสดงอาหารทั้งหมดถ้าเลือก "All"
+      return _foods;
     }
     return _foods.where((food) => food.category == _selectedCategory).toList();
   }
@@ -28,13 +28,12 @@ class FoodProvider with ChangeNotifier {
   List<String> get categories => _categories;
   String get selectedCategory => _selectedCategory;
 
-  // ดึงข้อมูลอาหารและสร้างรายการหมวดหมู่
+  // ดึงข้อมูลอาหาร
   Future<void> fetchFoods() async {
     _isLoading = true;
     notifyListeners();
     try {
       _foods = await _foodRepository.getFoodsWithNutrients();
-      // สร้างรายการหมวดหมู่ที่ไม่ซ้ำกัน
       _categories = ['All', ..._foods.map((food) => food.category).toSet().toList()];
       _error = null;
     } catch (e) {
@@ -45,13 +44,117 @@ class FoodProvider with ChangeNotifier {
     }
   }
 
-  // เลือกหรือเปลี่ยนหมวดหมู่
+  // เลือกหมวดหมู่
   void selectCategory(String category) {
     _selectedCategory = category;
     notifyListeners();
   }
 
-  // การเลือกอาหาร (เหมือนเดิม)
+  // สร้างอาหารใหม่
+  Future<void> createFood({
+    required String foodName,
+    required String category,
+    required String servingSize,
+    required double caloriesPerServing,
+    String? imageUrl,
+    double? protein,
+    double? fat,
+    double? carbohydrates,
+    double? fiber,
+    double? sugar,
+    double? sodium,
+  }) async {
+    _isLoading = true;
+    notifyListeners();
+    try {
+      await _foodRepository.createFood(
+        foodName: foodName,
+        category: category,
+        servingSize: servingSize,
+        caloriesPerServing: caloriesPerServing,
+        imageUrl: imageUrl,
+        protein: protein,
+        fat: fat,
+        carbohydrates: carbohydrates,
+        fiber: fiber,
+        sugar: sugar,
+        sodium: sodium,
+      );
+      await fetchFoods();
+      _error = null;
+    } catch (e) {
+      _error = e.toString();
+      rethrow; // ส่ง error ไปยัง UI
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  // อัปเดตอาหาร
+  Future<void> updateFood({
+    required int foodId,
+    required String foodName,
+    required String category,
+    required String servingSize,
+    required double caloriesPerServing,
+    String? imageUrl,
+    int? nutrientId,
+    double? protein,
+    double? fat,
+    double? carbohydrates,
+    double? fiber,
+    double? sugar,
+    double? sodium,
+  }) async {
+    _isLoading = true;
+    notifyListeners();
+    try {
+      await _foodRepository.updateFood(
+        foodId: foodId,
+        foodName: foodName,
+        category: category,
+        servingSize: servingSize,
+        caloriesPerServing: caloriesPerServing,
+        imageUrl: imageUrl,
+        nutrientId: nutrientId,
+        protein: protein,
+        fat: fat,
+        carbohydrates: carbohydrates,
+        fiber: fiber,
+        sugar: sugar,
+        sodium: sodium,
+      );
+      await fetchFoods();
+      _error = null;
+    } catch (e) {
+      _error = e.toString();
+      rethrow; // ส่ง error ไปยัง UI
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  // ลบอาหาร
+  Future<void> deleteFood(int foodId) async {
+    _isLoading = true;
+    notifyListeners();
+    try {
+      await _foodRepository.deleteFood(foodId);
+      _selectedFoods.removeWhere((food) => food.foodId == foodId);
+      await fetchFoods();
+      _error = null;
+    } catch (e) {
+      _error = e.toString();
+      rethrow;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  // เลือกอาหาร
   void toggleFoodSelection(Food food) {
     if (_selectedFoods.contains(food)) {
       _selectedFoods.remove(food);
@@ -61,7 +164,7 @@ class FoodProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  // คำนวณสารอาหาร (เหมือนเดิม)
+  // คำนวณสารอาหาร
   Map<String, double> calculateTotalNutrients() {
     double protein = 0;
     double fat = 0;

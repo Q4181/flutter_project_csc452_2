@@ -1,9 +1,10 @@
-class Food {//add api(food_repository) food in program(category and servingSize use in web )
+class Food {
   final int foodId;
   final String foodName;
-  final String category;//not use
-  final String servingSize;//not use again
+  final String category;
+  final String servingSize;
   final String imageUrl;
+  final double caloriesPerServing;
   final Nutrient? nutrient;
 
   Food({
@@ -12,10 +13,10 @@ class Food {//add api(food_repository) food in program(category and servingSize 
     required this.category,
     required this.servingSize,
     required this.imageUrl,
+    required this.caloriesPerServing,
     this.nutrient,
   });
 
-//JSON to Food obj to use other and cal
   factory Food.fromJson(Map<String, dynamic> json) {
     return Food(
       foodId: json['food_id'],
@@ -23,16 +24,13 @@ class Food {//add api(food_repository) food in program(category and servingSize 
       category: json['category'],
       servingSize: json['serving_size'],
       imageUrl: json['image_url'] ?? 'https://via.placeholder.com/150',
-      nutrient: json['nutrient_id'] != null
-          ? Nutrient.fromJson(json)
-          : null,
+      caloriesPerServing: (json['calories_per_serving'] as num?)?.toDouble() ?? 0.0,
+      nutrient: json['nutrient_id'] != null ? Nutrient.fromJson(json) : null,
     );
   }
 }
-//                      ^
-//                      |
-//                      |
-class Nutrient {//same food 
+
+class Nutrient {
   final int nutrientId;
   final int foodId;
   final double protein;
