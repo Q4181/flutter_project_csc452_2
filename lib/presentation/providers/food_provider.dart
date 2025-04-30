@@ -84,7 +84,7 @@ class FoodProvider with ChangeNotifier {
       _error = null;
     } catch (e) {
       _error = e.toString();
-      rethrow; // ส่ง error ไปยัง UI
+      rethrow;
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -129,7 +129,7 @@ class FoodProvider with ChangeNotifier {
       _error = null;
     } catch (e) {
       _error = e.toString();
-      rethrow; // ส่ง error ไปยัง UI
+      rethrow;
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -161,6 +161,12 @@ class FoodProvider with ChangeNotifier {
     } else {
       _selectedFoods.add(food);
     }
+    notifyListeners();
+  }
+
+  // ล้างการเลือกอาหารทั้งหมด
+  void clearSelectedFoods() {
+    _selectedFoods.clear();
     notifyListeners();
   }
 

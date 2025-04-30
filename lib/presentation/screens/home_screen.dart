@@ -182,13 +182,13 @@ class HomeScreen extends StatelessWidget {
               );
             },
           ),
+          // ปุ่ม Create, Edit, Delete (แนวนอน, ล่างซ้าย)
           Positioned(
             bottom: 16,
             left: 16,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Row(
               children: [
-                FloatingActionButton(
+                ElevatedButton(
                   onPressed: () {
                     showDialog(
                       context: context,
@@ -223,31 +223,40 @@ class HomeScreen extends StatelessWidget {
                               sodium: sodium,
                             );
                           } catch (e) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('Error creating food: $e')),
-                            );
+                            // ไม่แสดง SnackBar
                           }
                         },
                       ),
                     );
                   },
-                  backgroundColor: Colors.green,
-                  tooltip: 'Create Food',
-                  child: const Icon(Icons.add),
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    elevation: 3,
+                    backgroundColor: Colors.green,
+                    foregroundColor: Colors.white,
+                  ),
+                  child: const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.add, size: 20),
+                      SizedBox(width: 8),
+                      Text(
+                        'Create',
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                      ),
+                    ],
+                  ),
                 ),
-                const SizedBox(height: 8),
-                FloatingActionButton(
+                const SizedBox(width: 8),
+                ElevatedButton(
                   onPressed: () {
                     if (foodProvider.selectedFoods.isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Please select a food to edit')),
-                      );
                       return;
                     }
                     if (foodProvider.selectedFoods.length > 1) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Please select only one food to edit')),
-                      );
                       return;
                     }
                     final food = foodProvider.selectedFoods.first;
@@ -287,25 +296,37 @@ class HomeScreen extends StatelessWidget {
                               sodium: sodium,
                             );
                           } catch (e) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('Error updating food: $e')),
-                            );
+                            // ไม่แสดง SnackBar
                           }
                         },
                       ),
                     );
                   },
-                  backgroundColor: Colors.blue,
-                  tooltip: 'Edit Food',
-                  child: const Icon(Icons.edit),
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    elevation: 3,
+                    backgroundColor: Colors.blue,
+                    foregroundColor: Colors.white,
+                  ),
+                  child: const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.edit, size: 20),
+                      SizedBox(width: 8),
+                      Text(
+                        'Edit',
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                      ),
+                    ],
+                  ),
                 ),
-                const SizedBox(height: 8),
-                FloatingActionButton(
+                const SizedBox(width: 8),
+                ElevatedButton(
                   onPressed: () {
                     if (foodProvider.selectedFoods.isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Please select at least one food to delete')),
-                      );
                       return;
                     }
                     showDialog(
@@ -328,9 +349,7 @@ class HomeScreen extends StatelessWidget {
                                 }
                                 Navigator.pop(context);
                               } catch (e) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text('Error deleting food: $e')),
-                                );
+                                // ไม่แสดง SnackBar
                               }
                             },
                             child: const Text('Delete', style: TextStyle(color: Colors.red)),
@@ -339,11 +358,61 @@ class HomeScreen extends StatelessWidget {
                       ),
                     );
                   },
-                  backgroundColor: Colors.red,
-                  tooltip: 'Delete Food',
-                  child: const Icon(Icons.delete),
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    elevation: 3,
+                    backgroundColor: Colors.red,
+                    foregroundColor: Colors.white,
+                  ),
+                  child: const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.delete, size: 20),
+                      SizedBox(width: 8),
+                      Text(
+                        'Delete',
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                      ),
+                    ],
+                  ),
                 ),
               ],
+            ),
+          ),
+          // ปุ่ม Clear (ขวาล่าง)
+          Positioned(
+            bottom: 16,
+            right: 16,
+            child: ElevatedButton(
+              onPressed: () {
+                if (foodProvider.selectedFoods.isEmpty) {
+                  return;
+                }
+                foodProvider.clearSelectedFoods();
+              },
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                elevation: 3,
+                backgroundColor: Colors.grey,
+                foregroundColor: Colors.white,
+              ),
+              child: const Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.clear, size: 20),
+                  SizedBox(width: 8),
+                  Text(
+                    'Clear',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
