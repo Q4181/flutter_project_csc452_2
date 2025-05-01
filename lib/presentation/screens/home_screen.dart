@@ -25,7 +25,7 @@ class HomeScreen extends StatelessWidget {
         ),
         centerTitle: true,
         elevation: 2,
-        backgroundColor: Color.fromARGB(255, 230, 67, 67),
+        backgroundColor: Color.fromARGB(255, 148, 67, 230),
         foregroundColor: Colors.white,
       ),
       body: Stack(
@@ -80,7 +80,7 @@ class HomeScreen extends StatelessWidget {
                     child: GridView.builder(
                       padding: const EdgeInsets.all(12),
                       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 4,
+                        crossAxisCount: 6,
                         crossAxisSpacing: 10,
                         mainAxisSpacing: 10,
                         childAspectRatio: 0.9,
@@ -252,13 +252,13 @@ class HomeScreen extends StatelessWidget {
                 ),
                 const SizedBox(width: 8),
                 ElevatedButton(
-                  onPressed: () {
+                   onPressed: () {
                     if (foodProvider.selectedFoods.isEmpty) {
                       return;
                     }
                     if (foodProvider.selectedFoods.length > 1) {
                       return;
-                    }
+                    }        
                     final food = foodProvider.selectedFoods.first;
                     showDialog(
                       context: context,
@@ -301,6 +301,7 @@ class HomeScreen extends StatelessWidget {
                         },
                       ),
                     );
+                    foodProvider.clearSelectedFoods();
                   },
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
