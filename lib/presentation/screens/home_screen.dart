@@ -49,7 +49,6 @@ class HomeScreen extends StatelessWidget {
                     child: DropdownButton<String>(
                       value: provider.selectedCategory,
                       isExpanded: true,
-                      hint: const Text('Select Category'),
                       items: provider.categories.map((category) {
                         return DropdownMenuItem<String>(
                           value: category,
@@ -68,17 +67,8 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  if (provider.foods.isEmpty)
-                    const Padding(
-                      padding: EdgeInsets.all(16),
-                      child: Text(
-                        'No foods in this category',
-                        style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic),
-                      ),
-                    ),
                   Expanded(
                     child: GridView.builder(
-                      padding: const EdgeInsets.all(12),
                       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 6,
                         crossAxisSpacing: 10,
@@ -182,7 +172,8 @@ class HomeScreen extends StatelessWidget {
               );
             },
           ),
-          // ปุ่ม Create, Edit, Delete (แนวนอน, ล่างซ้าย)
+          
+          // ปุ่ม Create, Edit, Delete
           Positioned(
             bottom: 16,
             left: 16,
@@ -223,7 +214,7 @@ class HomeScreen extends StatelessWidget {
                               sodium: sodium,
                             );
                           } catch (e) {
-                            // ไม่แสดง SnackBar
+                            
                           }
                         },
                       ),
@@ -296,7 +287,7 @@ class HomeScreen extends StatelessWidget {
                               sodium: sodium,
                             );
                           } catch (e) {
-                            // ไม่แสดง SnackBar
+
                           }
                         },
                       ),
@@ -335,7 +326,7 @@ class HomeScreen extends StatelessWidget {
                       builder: (context) => AlertDialog(
                         title: const Text('Confirm Delete'),
                         content: Text(
-                          'Are you sure you want to delete ${foodProvider.selectedFoods.length} food(s)?',
+                          'Are you sure you want to delete ${foodProvider.selectedFoods.length} food?',
                         ),
                         actions: [
                           TextButton(

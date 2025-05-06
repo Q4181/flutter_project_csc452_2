@@ -31,7 +31,7 @@ class FoodProvider with ChangeNotifier {
   // ดึงข้อมูลอาหาร
   Future<void> fetchFoods() async {
     _isLoading = true;
-    notifyListeners();
+    notifyListeners();//update ui
     try {
       _foods = await _foodRepository.getFoodsWithNutrients();
       _categories = ['All', ..._foods.map((food) => food.category).toSet().toList()];

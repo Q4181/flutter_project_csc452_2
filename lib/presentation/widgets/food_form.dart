@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../data/models/food.dart';
 
 class FoodForm extends StatefulWidget {
-  final Food? food; // null สำหรับ Create, มีค่าเมื่อ Edit
+  final Food? food;
   final Future<void> Function({
     required String foodName,
     required String category,
@@ -46,7 +46,7 @@ class _FoodFormState extends State<FoodForm> {
     _categoryController = TextEditingController(text: widget.food?.category ?? '');
     _servingSizeController = TextEditingController(text: widget.food?.servingSize ?? '');
     _imageUrlController = TextEditingController(text: widget.food?.imageUrl ?? '');
-    _caloriesPerServingController = TextEditingController(text: '0'); // Default to 0
+    _caloriesPerServingController = TextEditingController(text: '0'); 
     _proteinController = TextEditingController(text: widget.food?.nutrient?.protein.toString() ?? '');
     _fatController = TextEditingController(text: widget.food?.nutrient?.fat.toString() ?? '');
     _carbohydratesController = TextEditingController(text: widget.food?.nutrient?.carbohydrates.toString() ?? '');
@@ -55,21 +55,7 @@ class _FoodFormState extends State<FoodForm> {
     _sodiumController = TextEditingController(text: widget.food?.nutrient?.sodium.toString() ?? '');
   }
 
-  @override
-  void dispose() {
-    _foodNameController.dispose();
-    _categoryController.dispose();
-    _servingSizeController.dispose();
-    _imageUrlController.dispose();
-    _caloriesPerServingController.dispose();
-    _proteinController.dispose();
-    _fatController.dispose();
-    _carbohydratesController.dispose();
-    _fiberController.dispose();
-    _sugarController.dispose();
-    _sodiumController.dispose();
-    super.dispose();
-  }
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -106,7 +92,7 @@ class _FoodFormState extends State<FoodForm> {
                 keyboardType: TextInputType.number,
                 validator: (value) => value!.isEmpty ? 'Required' : null,
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 30),
               const Text('Nutrients (Optional)', style: TextStyle(fontWeight: FontWeight.bold)),
               TextFormField(
                 controller: _proteinController,
