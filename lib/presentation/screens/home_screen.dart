@@ -45,7 +45,7 @@ class HomeScreen extends StatelessWidget {
               return Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),//categories
                     child: DropdownButton<String>(
                       value: provider.selectedCategory,
                       isExpanded: true,
@@ -70,7 +70,7 @@ class HomeScreen extends StatelessWidget {
                   Expanded(
                     child: GridView.builder(
                       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 6,
+                        crossAxisCount: 6, //แถว
                         crossAxisSpacing: 10,
                         mainAxisSpacing: 10,
                         childAspectRatio: 0.9,
